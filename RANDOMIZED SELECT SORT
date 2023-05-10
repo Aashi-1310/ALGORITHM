@@ -1,0 +1,102 @@
+#include<iostream>
+#include<stdlib.h> // for rand() function
+using namespace std;
+
+// function to display the elements of an array
+void display(int ar[],int n)
+{
+    cout<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cout<<ar[i]<<" ";
+    }
+    cout<<endl;
+}
+
+// function to swap two integer values using call by reference
+void swap(int &a,int &b)
+{
+    int temp;
+    temp=a;
+    a=b;
+    b=temp;
+}
+
+// function to generate a random integer in the range [p, r)
+int random(int p,int r)
+{
+    int x=( rand() % (r-p) ) + p;
+    return x;
+}
+
+// function to partition an array A[p..r] using the last element A[r] as pivot
+int partition(int A[],int p,int r)
+{
+    int x;
+    x=A[r]; // pivot element
+    int i=p;
+    int j;
+    for(j=p;j<r;j++)
+    {
+        if(A[j] <= x) // if current element is smaller than or equal to pivot element
+        {
+            swap(A[i++],A[j]); // swap current element with the element at index i and increment i
+        }
+    }
+    swap(A[i],A[r]); // swap pivot element with the element at index i
+    
+    return i; // return the index of pivot element
+}
+
+// function to partition an array A[p..r] using a random element as pivot
+int r_partition(int A[],int p,int r)
+{
+    int i = random(p,r); // generate a random index i in the range [p, r)
+    swap(A[r],A[i]); // swap the element at index r with the element at index i
+    
+    return partition(A,p,r); // partition the array using the last element as pivot
+}
+
+// function to find the x-th smallest element in an array ar[p..r]
+int randomized_select(int ar[],int p,int r,int x)
+{
+    if(p==r) // base case: array contains only one element
+    {
+        return ar[p];
+    }
+    int q = r_partition(ar,p,r); // partition the array using a random element as pivot
+    int k = q-p+1; // number of elements in the left subarray
+    if(x==k) // the pivot element is the x-th smallest element
+    {
+        return ar[q];
+    }
+    else if(x<k) // x-th smallest element is in the left subarray
+    {
+        return randomized_select(ar,p,q-1,x);
+    }
+    else // x-th smallest element is in the right subarray
+    {
+        return randomized_select(ar,q+1,r,x-k);
+    }
+}
+
+int main()
+{
+    int n,x,out;
+    int *ar;
+    cout<<"Enter the size of the array: ";
+    cin>>n;
+    ar = new int[n];
+    cout<<"\nEnter the elemnets of the array: ";
+    for(int i=0;i<n;i++)
+    {
+        cin>>ar[i];
+    }
+    cout<<"\nEntered array is: ";
+    display(ar,n); // display the entered array
+    cout<<"\nEnter the sorted position of element: ";
+    cin>>x;
+    out = randomized_select(ar,0,n-1,x); // find the x-th smallest element in the array
+    cout<<"\nThe element is: "<<out; // display the x-th smallest element
+    return 0;    
+}
