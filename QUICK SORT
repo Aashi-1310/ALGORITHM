@@ -1,0 +1,92 @@
+#include <iostream>
+#include<cstdlib>
+using namespace std;
+class quickSort
+{
+	int *A;
+	int size;
+	int count;
+	public:
+	quickSort(int s)
+	{
+		size=s;
+		A=new int [size];
+		count=0;
+	}
+	
+	
+	void input()
+	{
+		cout<<"\nEnter the elements: ";
+		
+		for(int i=0; i<size; i++)
+		{
+			cin>>A[i];
+		}
+		cout<<"The Array is: ";
+		display();
+		quicksort(A,0,(size-1));
+	}
+		
+	void swap(int &a, int &b)
+	{
+		int temp=a;
+		a=b;
+		b=temp;
+	}
+	
+	void quicksort(int *A, int p, int r)
+	{
+		if (p<r)
+		{
+			int q= rPartition(A,p,r);
+			//cout<<"pivot "<<q<<endl;
+			quicksort(A,p,q-1);
+			quicksort(A,q+1,r);
+		}
+	}
+	
+	int rPartition(int *A,int p, int r)
+	{
+		int m=p+rand()%(r-p);
+		swap(A[m],A[r]);
+		int x=A[r];
+		int i=p-1;
+		for(int j=p;j<r;j++)
+		{
+			count++;
+			if(A[j]<=x)
+			{
+				i=i+1;
+				swap(A[i],A[j]);
+			}
+		}
+		swap(A[i+1],A[r]);
+		return i+1;
+	}
+	
+	void display()
+	{
+		for(int i=0; i<size; i++)
+		{
+			cout<<A[i]<<" ";
+		}
+	}
+	void comp()
+	{
+		cout<<"\nNumber of comparisions are: "<<count<<endl;
+	}
+};
+
+int main()
+{
+	int n;
+	cout<<"\nEnter the number of elements:";
+	cin>>n;
+	
+	quickSort q(n);
+	q.input();
+	cout<<"\nThe Sorted Array is: ";
+	q.display();
+	q.comp();
+}
