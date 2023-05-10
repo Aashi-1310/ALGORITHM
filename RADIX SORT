@@ -1,0 +1,69 @@
+#include <iostream>
+#include<cmath>
+using namespace std;
+
+void countSort(int A[], int n, int exp) 
+{
+    int k = 10;                  // base 10 system
+    int i, j;
+    int *C = new int[k];
+    int *B = new int[n];
+    for (i = 0; i < k; i++) 
+	{
+        C[i] = 0;                  //initializing array to 0
+    }
+    for (j = 0; j < n; j++) 
+	{
+        C[(A[j] / exp) % 10]++;      //counting freequency of each digit
+    }
+    for (i = 1; i < k; i++) 
+	{
+        C[i] += C[i - 1];           //calculating cummulative freequency 
+    }
+    for (j = n - 1; j >= 0; j--) 
+	{
+        B[C[(A[j] / exp) % 10] - 1] = A[j];     //puting sorted values in B
+        C[(A[j] / exp) % 10]--;            //decrementing CF
+    }
+    for (i = 0; i < n; i++) 
+	{
+        A[i] = B[i];             //copying sorted array back to A
+    }
+}
+void radixSort(int A[], int n) 
+{
+    int max = A[0];
+    for (int i = 1; i < n; i++)      //finding the maximum element
+	{
+        if (A[i] > max) {
+            max = A[i];
+        }
+    }
+    for (int exp = 1; max / exp > 0; exp *= 10) 
+	{
+        countSort(A, n, exp);
+    }
+}
+void display(int a[], int n){
+			cout<<"The sorted list is: ";
+			for(int i=0; i<n; i++)
+			{
+				cout<<a[i]<<" ";
+			}
+			cout<<endl;
+		}
+int main()
+{
+	int n;
+	
+	cout<<"\nEnter the number of terms: ";
+	cin>>n;
+	
+	int arr[n];
+	
+	cout<<"\nEnter the array to be sorted: ";
+	for(int i=0; i<n; i++)
+		cin>>arr[i];
+	radixSort(arr,n);
+	display(arr,n);
+}
