@@ -1,3 +1,5 @@
+//Implement Merge Sort (The program should report the number of comparisons)
+
 #include<iostream>
 #include<stdlib.h>
 using namespace std;
